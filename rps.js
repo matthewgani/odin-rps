@@ -1,31 +1,63 @@
 function computerPlay() {
-    let arr = ["Rock", "Paper", "Scissors"];
+    let arr = ["rock", "paper", "scissors"];
     return arr[Math.floor(Math.random()*arr.length)];
 }
 
 
-const buttons = document.querySelectorAll('button');
+const buttons = document.querySelectorAll('.play');
+console.log(buttons);
 buttons.forEach(button => {
     button.addEventListener('click', () => {
         playerSelection = button.id;
         computerSelection = computerPlay();
         console.log(playerSelection);
         result = playRound(playerSelection, computerSelection);
-        updateScoreBoard(result);
-        // what if one of the score is alr 5 eg someone wins? reset? or create a reset button and disappear the other buttons
+        gameState = updateScoreBoard(result);
         
+
     })
 })
 
+const resetButton = document.querySelector('#reset');
+resetButton.disabled = true;
+resetButton.addEventListener('click', ()=> {
+    const buttons = document.querySelector('.play');
+    if (buttons.disabled) {
+        enableButtons();
+        resetButton.disabled = true;
+        const scoreBoard = document.querySelector('#scoreBoard');
+        console.log(scoreBoard.textContent);
+    
+        score = scoreBoard.textContent.split("-");
+        playerScore = 0;
+        computerScore = 0;
+        
+        scoreBoard.textContent = playerScore + "-" + computerScore;
+    }
+
+
+})
+
 function updateScoreBoard(result) {
-    const container = document.querySelector('container');
-    const header = document.createElement('h1');
+    const scoreBoard = document.querySelector('#scoreBoard');
+    console.log(scoreBoard.textContent);
+
+    score = scoreBoard.textContent.split("-");
+    playerScore = parseInt(score[0]);
+    computerScore = parseInt(score[1]);
+    
+    const container = document.querySelector('.container');
+    const header = document.querySelector('.container h3');
+
+    let text = "";
     switch (result) {
         case "Win":
-            text = "You Win! " + playerSelection + " beats " + computerSelection;
+            text = "Nice! " + playerSelection + " beats " + computerSelection;
+            playerScore += 1;
             break;
         case "Lose":
-            text = "You Lose! " + playerSelection + " loses to " + computerSelection;
+            text = "Oh no! " + playerSelection + " loses to " + computerSelection;
+            computerScore += 1;
             break;
         case "Draw":
             text = "Draw! Go again!";
@@ -33,7 +65,41 @@ function updateScoreBoard(result) {
         default:
             break;
     }
+    header.textContent = text;
+    container.appendChild(header);
+    scoreBoard.textContent = playerScore + "-" + computerScore;
+
+    if (playerScore == 5) {
+        const p = document.createElement('h1');
+        p.textContent = 'Congratulations! You Won!';
+        scoreBoard.appendChild(p);
+        disableButtons();
+    }
+    else if (computerScore == 5) {
+        const p = document.createElement('h1');
+        p.textContent = 'Too bad! You Lost!';
+        scoreBoard.append(p);
+        disableButtons();
+    }
+    
+
 }
+
+function disableButtons() {
+    const buttons = document.querySelectorAll('.play');
+    buttons.forEach((button) => {
+        button.disabled = true;
+    })
+    resetButton.disabled = false;
+}
+
+function enableButtons() {
+    const buttons = document.querySelectorAll('.play');
+    buttons.forEach((button) => {
+        button.disabled = false;
+    })
+}
+
 
 
 
@@ -45,13 +111,13 @@ function playRound (playerSelection, computerSelection) {
 
     if (playerSelection === "rock") {
         switch (computerSelection) {
-            case "Rock":
+            case "rock":
                 draw = true;
                 break;
-            case "Scissors":
+            case "scissors":
                 playerWin = true;
                 break;
-            case "Paper":
+            case "paper":
                 playerWin = false;
                 break;
             default:
@@ -61,13 +127,13 @@ function playRound (playerSelection, computerSelection) {
     }
     else if (playerSelection === 'paper') {
         switch (computerSelection) {
-            case "Rock":
+            case "rock":
                 playerWin = true;
                 break;
-            case "Scissors":
+            case "scissors":
                 playerWin = false;
                 break;
-            case "Paper":
+            case "paper":
                 draw = true;
                 break;
             default:
@@ -77,13 +143,13 @@ function playRound (playerSelection, computerSelection) {
     }
     else if (playerSelection === 'scissors') {
         switch (computerSelection) {
-            case "Rock":
+            case "rock":
                 playerWin = false;
                 break;
-            case "Scissors":
+            case "scissors":
                 draw = true;
                 break;
-            case "Paper":
+            case "paper":
                 playerWin = true;
                 break;
             default:
@@ -125,13 +191,13 @@ function simulateRound (playerSelection, computerSelection) {
         playerSelection = playerSelection.toLowerCase();
         if (playerSelection === "rock") {
             switch (computerSelection) {
-                case "Rock":
+                case "rock":
                     draw = true;
                     break;
-                case "Scissors":
+                case "scissors":
                     playerWin = true;
                     break;
-                case "Paper":
+                case "paper":
                     playerWin = false;
                     break;
                 default:
@@ -141,13 +207,13 @@ function simulateRound (playerSelection, computerSelection) {
         }
         else if (playerSelection === 'paper') {
             switch (computerSelection) {
-                case "Rock":
+                case "rock":
                     playerWin = true;
                     break;
-                case "Scissors":
+                case "scissors":
                     playerWin = false;
                     break;
-                case "Paper":
+                case "paper":
                     draw = true;
                     break;
                 default:
@@ -157,13 +223,13 @@ function simulateRound (playerSelection, computerSelection) {
         }
         else if (playerSelection === 'scissors') {
             switch (computerSelection) {
-                case "Rock":
+                case "rock":
                     playerWin = false;
                     break;
-                case "Scissors":
+                case "scissors":
                     draw = true;
                     break;
-                case "Paper":
+                case "paper":
                     playerWin = true;
                     break;
                 default:
@@ -176,12 +242,12 @@ function simulateRound (playerSelection, computerSelection) {
         }
         if (draw) {
             alert("Draw, go again!");
-            //playerSelection = prompt("Rock, paper or scissors?");
+            //playerSelection = prompt("rock, paper or scissors?");
             computerSelection = computerPlay();
         }
         if (invalidChoice) {
             alert("Invalid choice, go again!");
-            //playerSelection = prompt("Rock, paper or scissors?");
+            //playerSelection = prompt("rock, paper or scissors?");
             draw = true;
             computerSelection = computerPlay();
         }
@@ -202,7 +268,7 @@ function game() {
     for (let i = 0; i < 5; i++) {
         console.log("Round " + (i+1));
         computerSelection = computerPlay();
-        playerSelection = prompt("Rock, paper or scissors?");
+        playerSelection = prompt("rock, paper or scissors?");
         values = simulateRound(playerSelection, computerSelection);
         console.log(values[1]);
         if (values[0]) {
