@@ -26,13 +26,13 @@ resetButton.addEventListener('click', ()=> {
         enableButtons();
         resetButton.disabled = true;
         const scoreBoard = document.querySelector('#scoreBoard');
-        console.log(scoreBoard.textContent);
-    
-        score = scoreBoard.textContent.split("-");
         playerScore = 0;
         computerScore = 0;
         
         scoreBoard.textContent = playerScore + "-" + computerScore;
+
+        const header = document.querySelector('.container h3');
+        header.textContent = "";
     }
 
 
