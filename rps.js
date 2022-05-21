@@ -12,6 +12,7 @@ buttons.forEach(button => {
         console.log(playerSelection);
         result = playRound(playerSelection, computerSelection);
         updateScoreBoard(result);
+        // what if one of the score is alr 5 eg someone wins? reset? or create a reset button and disappear the other buttons
         
     })
 })
@@ -96,9 +97,9 @@ function playRound (playerSelection, computerSelection) {
     
 
     if (playerWin) {
-        return [playerWin, "You Win! " + playerSelection.charAt(0).toUpperCase() + playerSelection.slice(1) + " beats " + computerSelection];
+        return "Win";
     } else {
-        return [playerWin, "You Lose! " + computerSelection + " beats " + playerSelection.charAt(0).toUpperCase() + playerSelection.slice(1)];
+        return "Lose";
     }
 }
 
